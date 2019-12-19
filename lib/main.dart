@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -37,9 +38,13 @@ class WebViewExample extends StatelessWidget {
           javascriptChannels: Set.from([
             JavascriptChannel(
                 name: "colorChanged",
-                onMessageReceived: (JavascriptMessage result) {
+                onMessageReceived: (JavascriptMessage result) async {
                   print("message ${result.message}");
-                  _controller.evaluateJavascript('resolvePromise("${result.message}", "native date")');
+                  var response = await http.get('https://jsonplaceholder.typicode.com/todos/1');
+
+                  var encodedResponse = json.decode(response.body);
+                  
+                  _controller.evaluateJavascript('resolvePromise("${result.message}", "$encodedResponse")');
                   
                 }),
           ]),
