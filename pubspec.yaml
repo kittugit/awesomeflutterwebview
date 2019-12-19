@@ -49,13 +49,10 @@ flutter:
   #  - images/a_dot_ham.jpeg
 
   assets:
-    - assets/index.html
-    - assets/static/css/main.a33f0b9e.css
-    - assets/static/js/main.6effb128.js
-    - assets/three.html
-    - assets/three.js
-    - assets/kittu.html
-
+    - assets/
+    - assets/static/css/
+    - assets/static/js/
+   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

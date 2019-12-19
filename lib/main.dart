@@ -32,8 +32,17 @@ class WebViewExample extends StatelessWidget {
       ),
       body: Builder(builder: (BuildContext context) {
         return WebView(
-          initialUrl: 'assets/index.html',
+          initialUrl: 'assets/test.html',
           javascriptMode: JavascriptMode.unrestricted,
+          javascriptChannels: Set.from([
+            JavascriptChannel(
+                name: "colorChanged",
+                onMessageReceived: (JavascriptMessage result) {
+                  print("message ${result.message}");
+                  _controller.evaluateJavascript('resolvePromise("${result.message}", "native date")');
+                  
+                }),
+          ]),
           onWebViewCreated: (WebViewController webViewController) {
             _controller = webViewController;
           },
@@ -64,17 +73,18 @@ class WebViewExample extends StatelessWidget {
    void onTabTapped(int index) {
    if(index == 1) {
     //  _controller.evaluateJavascript("console.log('not a log')");
-    _controller.evaluateJavascript('window.location.hash = "stuff";');
+    _controller.loadUrl('assets/test.html');
     
   //  _controller.loadUrl('assets/index.html/#stuff');
    }
     if(index == 2) {
-       _controller.evaluateJavascript('window.location.hash = "contact";');
+      _controller.loadUrl('assets/kittu.html');
+       //_controller.evaluateJavascript('window.location.hash = "contact";');
       // _controller.loadUrl('assets/index.html/#contact');
 
     }
     if(index == 0) {
-      //  _controller.evaluateJavascript('navigateTo("home")');
+      // _controller.evaluateJavascript('navigateTo("home")');
       _controller.loadUrl('assets/index.html');
 
     }

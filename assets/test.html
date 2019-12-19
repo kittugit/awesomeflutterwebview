@@ -1,10 +1,58 @@
 <!DOCTYPE html><html lang="en">
     <head><meta charset="utf-8">
+
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 
     
 
     <script type="text/javascript">
+    var mobilePromises = {};
+
+    function resolvePromise(promiseId, data, error) {
+  if (error) {
+    mobilePromises[promiseId].reject(data);
+  } else {
+    mobilePromises[promiseId].resolve(data);
+  }
+  // remove referenfe to stored promise
+  delete mobilePromises[promiseId];
+}
+
+function callNative() {
+    postNative().then(data => {
+        document.getElementById("result").innerHTML = data;
+        
+     });
+}
+function postNative() {
+        //colorChanged.postMessage("red");
+
+        const promise = new Promise((resolve, reject) => {
+    // we generate a unique id to reference the promise later
+    // from native function
+    const promiseId = generateUUID();
+    // save reference to promise in the global variable
+    mobilePromises[promiseId] = { resolve, reject };
+    try {
+      // call native function
+      colorChanged.postMessage(promiseId);
+    } catch (e) {
+      console.debug(e);
+    }
+  });
+  return promise;
+    }
+
+    function generateUUID() {
+  /* eslint-disable no-bitwise */
+  let d = new Date().getTime();
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+  return uuid;
+}
         function add(num1, num2) {
             var result = num1 + num2;
             document.getElementById("result").innerHTML
@@ -16,6 +64,7 @@
 <body>
     <p>Hello from Flutter</p>
     <p id="result"></p>
+    <button onclick="callNative();">Call Native</button>
 </body>
 
 </html>

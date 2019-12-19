@@ -9,7 +9,19 @@
 
     <script type="text/javascript">
         function navigateTo(myhash) {
-            window.location.hash = myhash;
+            console.log("navigate");
+            const options = {
+        method: 'GET',
+        headers: {'Content-type': 'application/json', "Accept": "application/json", "Autorization" : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJqb2huIiwic2NvcGUiOlsiZm9vIiwicmVhZCIsIndyaXRlIl0sIm9yZ2FuaXphdGlvbiI6ImpvaG50T3VHIiwiZXhwIjoxNTc2MzY0MzQ3LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiOTJjNzUwM2UtOGVmMC00ZDE5LTkyN2ItOWFlNjkyNmVmYzg0IiwiY2xpZW50X2lkIjoiZm9vQ2xpZW50SWRQYXNzd29yZCJ9.h21Mz2FaXVK4aOWkeNEE6Rjq0sKrHTGB_qLLUexTrUc"}
+    };
+
+            
+            fetch('http://localhost:8443/spring-security-oauth-resource/foos/1', options)
+  .then(response => response.json())
+  .then(json => console.log(json))
+  .catch(function(error){
+                console.log(error)
+            });
         }
     </script>
 </head>
